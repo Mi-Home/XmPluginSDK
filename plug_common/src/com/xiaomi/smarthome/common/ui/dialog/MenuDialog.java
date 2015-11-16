@@ -73,7 +73,9 @@ public class MenuDialog extends Dialog {
         lp.width = WindowManager.LayoutParams.FILL_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(lp);
-
+        
+        setCancelable(true);
+        setCanceledOnTouchOutside(true);
 
         mListView = (ListView) findViewById(R.id.select_dialog_listview);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

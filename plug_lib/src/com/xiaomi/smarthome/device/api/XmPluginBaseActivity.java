@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +37,10 @@ import java.util.List;
  */
 public class XmPluginBaseActivity extends FragmentActivity implements IXmPluginActivity {
     private static final String TAG = "XmPluginBaseActivity";
+    
+    public static String FINISH_TAG = "xmplugin_finish";
+    public static String LAST_FINISH_ACTIVITY = "xmplugin_last_finish_activity";
+    public static int START_ACTIVITY_TAG = 10000;
 
     protected IXmPluginHostActivity mHostActivity;
     // 宿主Activity
@@ -105,6 +110,19 @@ public class XmPluginBaseActivity extends FragmentActivity implements IXmPluginA
 
     public DeviceStat getDeviceStat() {
         return mDeviceStat;
+    }
+    
+    /**ApiLevel:14
+     * 按照调用栈一直回退finish，直到lastActivityClass为止,当lastActivityClass为null会一直回退到设备列表
+     * @param lastActivityClass
+     */
+    public void finishParent(String lastActivityClass) {
+        Intent data = new Intent();
+        data.putExtra(FINISH_TAG, true);
+        if (!TextUtils.isEmpty(lastActivityClass))
+            data.putExtra(LAST_FINISH_ACTIVITY, lastActivityClass);
+        activity().setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override
@@ -311,6 +329,14 @@ public class XmPluginBaseActivity extends FragmentActivity implements IXmPluginA
         if (isLocalLaunch()) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        if (data != null) {
+            boolean isFinish = data.getBooleanExtra(FINISH_TAG, false);
+            String activitName = this.getClass().getName();
+            String lastActivity = data.getStringExtra(LAST_FINISH_ACTIVITY);
+            if (isFinish && !activitName.equals(lastActivity)) {
+                finishParent(lastActivity);
+            }
+        }
     }
 
     @Override
@@ -499,7 +525,7 @@ public class XmPluginBaseActivity extends FragmentActivity implements IXmPluginA
 
     // 启动插件包内的activity
     public void startActivity(Intent intent, String className) {
-        startActivityForResult(intent, className, -1);
+        startActivityForResult(intent, className, START_ACTIVITY_TAG);
     }
 
     public void startActivityForResult(Intent intent, String className,
@@ -679,5 +705,6 @@ public class XmPluginBaseActivity extends FragmentActivity implements IXmPluginA
             super.onUserLeaveHint();
         }
     }
+    
 
 }

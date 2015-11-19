@@ -8,6 +8,7 @@ import com.xiaomi.smarthome.bluetooth.Response.BleNotifyResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleReadResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleWriteResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleConnectResponse;
+import com.xiaomi.smarthome.bluetooth.Response.BleConnectNoticeResponse;
 
 /**
  * ApiLevel: 13
@@ -42,6 +43,12 @@ public abstract class XmBluetoothManager {
 
     /**
      * ApiLevel: 13
+     * 设备连接
+     */
+    public abstract void connect(String mac, final BleConnectNoticeResponse response);
+
+    /**
+     * ApiLevel: 13
      * 读设备
      */
     public abstract void read(String mac, UUID serviceId, UUID characterId, final BleReadResponse response);
@@ -63,6 +70,12 @@ public abstract class XmBluetoothManager {
      * 断开连接
      */
     public abstract void disconnect(String mac);
+
+    /**
+     * ApiLevel 13
+     * 断开连接
+     */
+    public abstract void disconnect(String mac, BleConnectNoticeResponse response);
 
     /**
      * ApiLevel 13

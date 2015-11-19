@@ -1173,4 +1173,9 @@ public abstract class XmPluginHostApi {
     @Deprecated
     public abstract Cursor queryDownload(boolean onlyVisibleDownloads, long... filterIds);
 
+    
+    /**
+     * ApiLevel:14 更新设备的子设备
+     */
+    public abstract void updateSubDevice(XmPluginPackage xmPluginPackage,String[] didList,Callback<List<DeviceStat>> callback); 
 }

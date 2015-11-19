@@ -26,4 +26,12 @@ public class Response {
     public interface BleNotifyResponse extends BleResponse<Void> {
         void onNotify(UUID service, UUID character, byte[] data);
     }
+
+    public interface BleConnectNoticeResponse extends BleConnectResponse {
+
+        public static final int STATUS_CONNECTED = 1;
+        public static final int STATUS_DISCONNECTED = 2;
+
+        public void onConnectionStateChanged(int status);
+    }
 }

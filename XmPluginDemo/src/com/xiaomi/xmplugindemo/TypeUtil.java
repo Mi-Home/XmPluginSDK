@@ -3,6 +3,9 @@ package com.xiaomi.xmplugindemo;
 class TypeUtil {
 
     static Boolean toBoolean(Object value) {
+        if(value==null){
+            return false;
+        }
         if (value instanceof Boolean) {
             return (Boolean) value;
         } else if (value instanceof String) {
@@ -17,6 +20,9 @@ class TypeUtil {
     }
 
     static Double toDouble(Object value) {
+        if(value==null){
+            return 0.0;
+        }
         if (value instanceof Double) {
             return (Double) value;
         } else if (value instanceof Number) {
@@ -31,6 +37,9 @@ class TypeUtil {
     }
 
     static Integer toInteger(Object value) {
+        if(value==null){
+            return 0;
+        }
         if (value instanceof Integer) {
             return (Integer) value;
         } else if (value instanceof Number) {
@@ -45,6 +54,9 @@ class TypeUtil {
     }
 
     static Long toLong(Object value) {
+        if(value==null){
+            return 0l;
+        }
         if (value instanceof Long) {
             return (Long) value;
         } else if (value instanceof Number) {
@@ -59,6 +71,9 @@ class TypeUtil {
     }
 
     static String toString(Object value) {
+        if(value==null){
+            return "";
+        }
         if (value instanceof String) {
             return (String) value;
         } else if (value != null) {

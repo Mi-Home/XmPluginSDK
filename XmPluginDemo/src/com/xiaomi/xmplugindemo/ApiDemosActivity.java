@@ -127,8 +127,16 @@ public class ApiDemosActivity extends XmPluginBaseActivity {
         findViewById(R.id.open_shop).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("http://home.mi.com/shop/search?action=check&keyword=小蚁摄像头 夜视&source=com.xiaomi.smarthome​");
+                Uri uri = Uri.parse("http://home.mi.com/shop/search?action=check&keyword=小蚁摄像头&source=com.xiaomi.smarthome​");
                 XmPluginHostApi.instance().gotoPage(activity(), mPluginPackage, uri, null);
+            }
+        });
+        
+        findViewById(R.id.activity_finish).setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                finishParent(null);
             }
         });
     }

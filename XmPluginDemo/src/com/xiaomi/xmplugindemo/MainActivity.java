@@ -312,7 +312,7 @@ public class MainActivity extends XmPluginBaseActivity implements StateChangedLi
                         convertView.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                startActivity(null, ShareActivity.class.getName());
+                                startActivity(null, ApiDemosActivity.class.getName());
                                 menuDialog.dismiss();
                             }
                         });

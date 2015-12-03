@@ -475,4 +475,9 @@ public interface IXmPluginHostActivity {
      * ApiLevel:14 进入某个设备固件更新
      */
     public abstract void goUpdateActivity(String did);
+    
+    /**
+     * ApiLevel:15 设置黑色的状态栏，默认是黑色的
+     */
+    public abstract void enableBlackTranslucentStatus();
 }

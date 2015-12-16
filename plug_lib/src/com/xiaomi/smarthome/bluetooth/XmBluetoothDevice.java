@@ -71,49 +71,6 @@ public class XmBluetoothDevice implements Parcelable {
         this.deviceType = deviceType;
     }
 
-    public XmBluetoothDevice(Parcel in) {
-        device = in.readParcelable(BluetoothDevice.class.getClassLoader());
-        rssi = in.readInt();
-        isConnected = (in.readByte() != 0);
-
-        int length = in.readInt();
-        if (length > 0) {
-            scanRecord = new byte[length];
-            in.readByteArray(scanRecord);
-        } else {
-            scanRecord = null;
-        }
-    }
-
-    @Override
-    public int describeContents() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        // TODO Auto-generated method stub
-        dest.writeParcelable(device, 0);
-        dest.writeInt(rssi);
-        dest.writeByte((byte) (isConnected ? 1 : 0));
-
-        dest.writeInt(scanRecord != null ? scanRecord.length : 0);
-        dest.writeByteArray(scanRecord);
-    }
-
-    public static final Parcelable.Creator<XmBluetoothDevice> CREATOR = new Parcelable.Creator<XmBluetoothDevice>() {
-
-        @Override
-        public XmBluetoothDevice createFromParcel(Parcel source) {
-            return new XmBluetoothDevice(source);
-        }
-
-        @Override
-        public XmBluetoothDevice[] newArray(int size) {
-            return new XmBluetoothDevice[size];
-        }
-    };
 
     @Override
     public String toString() {
@@ -124,4 +81,38 @@ public class XmBluetoothDevice implements Parcelable {
         sb.append(", connected = " + isConnected);
         return sb.toString();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.device, 0);
+        dest.writeInt(this.rssi);
+        dest.writeByte(isConnected ? (byte) 1 : (byte) 0);
+        dest.writeByteArray(this.scanRecord);
+        dest.writeInt(this.deviceType);
+        dest.writeString(this.name);
+    }
+
+    public XmBluetoothDevice(Parcel in) {
+        this.device = in.readParcelable(BluetoothDevice.class.getClassLoader());
+        this.rssi = in.readInt();
+        this.isConnected = in.readByte() != 0;
+        this.scanRecord = in.createByteArray();
+        this.deviceType = in.readInt();
+        this.name = in.readString();
+    }
+
+    public static final Creator<XmBluetoothDevice> CREATOR = new Creator<XmBluetoothDevice>() {
+        public XmBluetoothDevice createFromParcel(Parcel source) {
+            return new XmBluetoothDevice(source);
+        }
+
+        public XmBluetoothDevice[] newArray(int size) {
+            return new XmBluetoothDevice[size];
+        }
+    };
 }

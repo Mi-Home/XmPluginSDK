@@ -35,7 +35,7 @@ public class SceneInfo implements Parcelable {
         dest.writeInt(mRecommId);
         dest.writeString(mName);
         dest.writeInt(mEnable ? 1 : 0);
-        mLaunch.writeToParcel(dest, flags);
+        dest.writeList(mLaunchList);
         dest.writeList(mActions);
     }
 
@@ -51,7 +51,7 @@ public class SceneInfo implements Parcelable {
         mSceneId = in.readInt();
         mName = in.readString();
         mEnable = in.readInt() == 1;
-        mLaunch = new SceneLaunch(in);
+        mLaunchList = new ArrayList<SceneLaunch>();
         mActions = new ArrayList<SceneAction>();
         in.readList(mActions, SceneAction.class.getClassLoader());
     }
@@ -75,7 +75,7 @@ public class SceneInfo implements Parcelable {
     /**
      * ApiLevel:8
      */
-    public SceneLaunch mLaunch;
+    public List<SceneLaunch> mLaunchList;
     /**
      * ApiLevel:8
      */
@@ -123,6 +123,19 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mDeviceModel);
             dest.writeString(mEventString);
         }
+
+        public static final Parcelable.Creator<SceneLaunch> CREATOR = new Parcelable.Creator<SceneLaunch>() {
+
+            @Override
+            public SceneLaunch createFromParcel(Parcel source) {
+                return new SceneLaunch(source);
+            }
+
+            @Override
+            public SceneLaunch[] newArray(int size) {
+                return new SceneLaunch[size];
+            }
+        };
     }
 
     /**

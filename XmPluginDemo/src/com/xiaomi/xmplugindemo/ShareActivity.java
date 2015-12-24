@@ -114,6 +114,34 @@ public class ShareActivity extends XmPluginBaseActivity {
                 mHostActivity.openShareMediaActivity("智能家庭开发平台", "小米智能家庭开发平台", filePath);
             }
         });
+        
+        findViewById(R.id.testShareImageDialog).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                // R.drawable.welcome);
+                int width = getResources().getDisplayMetrics().widthPixels;
+                int height = getResources().getDisplayMetrics().heightPixels;
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                Canvas canvas = new Canvas(bitmap);
+                View view = findViewById(android.R.id.content);
+                view.draw(canvas);
+                
+                File dir = activity().getExternalCacheDir();
+                String filePath = dir.getAbsolutePath() + File.separator + "local_share.jpg";
+                new File(filePath).deleteOnExit();
+                try {
+                    OutputStream os = new FileOutputStream(filePath);
+                    bitmap.compress(CompressFormat.JPEG, 80, os);
+                } catch (Exception e) {
+
+                }
+
+               
+                mHostActivity.openSharePictureActivity("智能家庭开发平台", "小米智能家庭开发平台", filePath);
+            }
+        });
 
         findViewById(R.id.shopShareImage).setOnClickListener(new OnClickListener() {
 

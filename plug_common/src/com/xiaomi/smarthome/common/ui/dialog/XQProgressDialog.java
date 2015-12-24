@@ -31,6 +31,7 @@ public class XQProgressDialog extends MLAlertDialog {
 
     private boolean mIsIndeterminate;
     private boolean mIsCancelable;
+    private android.view.View.OnClickListener mCancelIntercepter;
     int mProgress;
     int mMax;
 
@@ -129,7 +130,11 @@ public class XQProgressDialog extends MLAlertDialog {
             mProgressCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cancel();
+                	if(mCancelIntercepter != null){
+                		mCancelIntercepter.onClick(v);
+                	} else {
+                		cancel();
+                	}
                 }
             });
         } else {
@@ -210,6 +215,15 @@ public class XQProgressDialog extends MLAlertDialog {
             mProgressPercent.setText("");
         }
     }
+    
+    public void setShowProgress(boolean show){
+    	if(show){
+    		setIndeterminate(mIsIndeterminate);
+    	} else {
+    		mIndeterminateProgress.setVisibility(View.GONE);
+    		mDeterminateProgress.setVisibility(View.GONE);
+    	}
+    }
 
     public boolean isIndeterminate() {
         return mIsIndeterminate;
@@ -242,4 +256,12 @@ public class XQProgressDialog extends MLAlertDialog {
         }
     }
 
+    public void setCancelIntercepter(android.view.View.OnClickListener clickListener){
+    	mCancelIntercepter = clickListener;
+    }
+    
+    @Override
+    public void cancel() {
+    	super.cancel();
+    }
 }

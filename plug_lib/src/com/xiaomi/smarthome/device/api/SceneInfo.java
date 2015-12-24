@@ -52,6 +52,7 @@ public class SceneInfo implements Parcelable {
         mName = in.readString();
         mEnable = in.readInt() == 1;
         mLaunchList = new ArrayList<SceneLaunch>();
+        in.readList(mLaunchList, SceneLaunch.class.getClassLoader());
         mActions = new ArrayList<SceneAction>();
         in.readList(mActions, SceneAction.class.getClassLoader());
     }
@@ -158,6 +159,9 @@ public class SceneInfo implements Parcelable {
          * ApiLevel:8
          */
         public String mActionString;
+
+
+        public String mExtra;
         public SceneAction() {
 
         }

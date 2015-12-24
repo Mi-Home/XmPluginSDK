@@ -1,5 +1,8 @@
 package com.xiaomi.smarthome.bluetooth;
 
+import android.os.Bundle;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -7,31 +10,38 @@ import java.util.UUID;
  */
 public class Response {
 
+    /**
+     * ApiLevel: 15
+     */
     public interface BleResponse<T> {
         public void onResponse(int code, T data);
     }
 
-    public interface BleConnectResponse extends BleResponse<Void> {
+    /**
+     * ApiLevel: 15
+     */
+    public interface BleConnectResponse extends BleResponse<Bundle> {
 
     }
 
+    /**
+     * ApiLevel: 15
+     */
     public interface BleReadResponse extends BleResponse<byte[]> {
 
     }
 
+    /**
+     * ApiLevel: 15
+     */
     public interface BleWriteResponse extends BleResponse<Void> {
 
     }
 
+    /**
+     * ApiLevel: 15
+     */
     public interface BleNotifyResponse extends BleResponse<Void> {
-        void onNotify(UUID service, UUID character, byte[] data);
-    }
 
-    public interface BleConnectNoticeResponse extends BleConnectResponse {
-
-        public static final int STATUS_CONNECTED = 1;
-        public static final int STATUS_DISCONNECTED = 2;
-
-        public void onConnectionStateChanged(int status);
     }
 }

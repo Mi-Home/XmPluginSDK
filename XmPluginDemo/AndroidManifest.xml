@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xiaomi.xmplugindemo"
-    android:versionCode="56"
-    android:versionName="0.1.56" >
+    android:versionCode="59"
+    android:versionName="0.1.59" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -21,7 +21,7 @@
         <!-- 设备model，必须 -->
         <meta-data
             android:name="model"
-            android:value="xiaomi.demo.v1" />
+            android:value="xiaomi.demo.v1|xiaomi.bledemo.v1" />
         <!-- 设备处理消息入口，必须 -->
         <meta-data
             android:name="message_handler"

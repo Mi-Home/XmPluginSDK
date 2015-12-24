@@ -14,6 +14,13 @@ public abstract class XmBluetoothSearchManager {
     /**
      * ApiLevel:5
      */
+    public static XmBluetoothSearchManager getInstance() {
+        return instance;
+    }
+
+    /**
+     * ApiLevel:5
+     */
     @Deprecated
     public static abstract class BluetoothHandler {
         /**
@@ -70,13 +77,6 @@ public abstract class XmBluetoothSearchManager {
     /**
      * ApiLevel:5
      */
-    public static XmBluetoothSearchManager getInstance() {
-        return instance;
-    }
-
-    /**
-     * ApiLevel:5
-     */
     @Deprecated
     public abstract void startScanBluetooth(BluetoothHandler handler);
 
@@ -91,5 +91,53 @@ public abstract class XmBluetoothSearchManager {
      */
     @Deprecated
     public abstract void startScanBluetoothImmediately(BluetoothHandler handler);
+
+    /**
+     * ApiLevel:15
+     */
+    public static class XmBluetoothSearchRequest {
+
+        public static final int SEARCH_BLUETOOTH_LE = BluetoothHandler.BLE;
+        public static final int SEARCH_BLUETOOTH_CLASSIC = BluetoothHandler.BSC;
+
+        public int taskType;
+
+        public int taskDuration;
+
+        public XmBluetoothSearchRequest(int scanType, int scanTime) {
+            this.taskType = scanType;
+            this.taskDuration = scanTime;
+        }
+
+        public XmBluetoothSearchRequest(BluetoothHandler handler) {
+            this.taskDuration = (int) handler.scanTime;
+            this.taskType = handler.handlerType;
+        }
+    }
+
+    /**
+     * ApiLevel:15
+     */
+    public static interface XmBluetoothSearchResponse {
+        public void onSearchStarted();
+
+        public void onDeviceFounded(XmBluetoothDevice device);
+
+        public void onSearchStopped();
+
+        public void onSearchCanceled();
+    }
+
+    /**
+     * ApiLevel:15
+     * @param request
+     * @param response
+     */
+    public abstract void startScanBluetooth(XmBluetoothSearchRequest request, XmBluetoothSearchResponse response);
+
+    /**
+     * ApiLevel:15
+     */
+    public abstract void stopScanBluetooth();
 
 }

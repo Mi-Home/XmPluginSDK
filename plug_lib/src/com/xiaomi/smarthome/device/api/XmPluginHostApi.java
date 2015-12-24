@@ -1177,5 +1177,10 @@ public abstract class XmPluginHostApi {
     /**
      * ApiLevel:14 更新设备的子设备
      */
-    public abstract void updateSubDevice(XmPluginPackage xmPluginPackage,String[] didList,Callback<List<DeviceStat>> callback); 
+    public abstract void updateSubDevice(XmPluginPackage xmPluginPackage,String[] didList,Callback<List<DeviceStat>> callback);
+
+    /**
+     * ApiLevel:15 异步调用第三方云接口
+     */
+    public abstract void callRemoteAsync(final String[] dids, final int appId, Object object, Callback<JSONObject> callback);
 }

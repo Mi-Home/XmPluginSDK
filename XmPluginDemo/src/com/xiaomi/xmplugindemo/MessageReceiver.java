@@ -26,8 +26,13 @@ public class MessageReceiver implements IXmPluginMessageReceiver {
             DeviceStat deviceStat) {
         switch (type) {
             case LAUNCHER: {// 启动入口
-                XmPluginHostApi.instance().startActivity(context, xmPluginPackage, intent,
-                        deviceStat.did, MainActivity.class);
+                if (deviceStat.model.startsWith("xiaomi.bledemo")) {
+                    XmPluginHostApi.instance().startActivity(context, xmPluginPackage, intent,
+                            deviceStat.did, BlueDemoMainActivity.class);
+                } else {
+                    XmPluginHostApi.instance().startActivity(context, xmPluginPackage, intent,
+                            deviceStat.did, MainActivity.class);
+                }
                 return true;
             }
             case PUSH_MESSAGE: {
@@ -41,14 +46,14 @@ public class MessageReceiver implements IXmPluginMessageReceiver {
                     String data = intent.getStringExtra("data");
                     DemoDevice device = DemoDevice.getDevice(deviceStat);
                     device.onSubscribeData(data);
-                   
+
                 } else if ("ScenePush".equals(msgType)) {// 场景消息
                     String event = intent.getStringExtra("event");
                     String extra = intent.getStringExtra("extra");
                     long time = intent.getLongExtra("time", 0);
                     boolean isNotified = intent.getBooleanExtra("isNotified", false);
                     Log.d(DemoDevice.MODEL, "ScenePush :" + event + "  " + extra);
-                    //TODO 处理场景通知
+                    // TODO 处理场景通知
                 }
             }
             default:
@@ -57,11 +62,11 @@ public class MessageReceiver implements IXmPluginMessageReceiver {
         return false;
     }
 
-    //智能家庭app主动插件，获取插件数据,建议定义的type>=100
+    // 智能家庭app主动插件，获取插件数据,建议定义的type>=100
     @Override
     public boolean handleMessage(Context context, XmPluginPackage xmPluginPackage, int type,
             Intent intent, DeviceStat deviceStat, MessageCallback callback) {
-        //TODO 主app调用插件获取数据
+        // TODO 主app调用插件获取数据
         return false;
     }
 

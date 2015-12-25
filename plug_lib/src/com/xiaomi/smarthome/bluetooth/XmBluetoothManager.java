@@ -1,9 +1,11 @@
 package com.xiaomi.smarthome.bluetooth;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import java.util.UUID;
 import com.xiaomi.smarthome.bluetooth.Response;
+import com.xiaomi.smarthome.bluetooth.Response.BleReadRssiResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleNotifyResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleReadResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleWriteResponse;
@@ -58,7 +60,7 @@ public abstract class XmBluetoothManager {
 
 
     /**
-     * ApiLevel 15
+     * ApiLevel: 15
      * 取消notify
      * @param mac
      * @param service
@@ -67,13 +69,45 @@ public abstract class XmBluetoothManager {
     public abstract void unnotify(String mac, UUID service, UUID character);
 
     /**
-     * ApiLevel 15
+     * ApiLevel: 15
+     * 读取已连接设备的rssi
+     * @param mac
+     */
+    public abstract void readRemoteRssi(String mac, BleReadRssiResponse response);
+
+    /**
+     * ApiLevel: 15
+     * 静默打开蓝牙
+     */
+    public abstract void openBluetoothSilently();
+
+
+    /**
+     * ApiLevel: 15
+     * 打开蓝牙，需要询问用户
+     */
+    public abstract void openBluetooth(Context context);
+
+    /**
+     * ApiLevel: 15
+     * @return 判断蓝牙是否打开
+     */
+    public abstract boolean isBluetoothOpen();
+
+    /**
+     * ApiLevel: 15
      */
     public static final String ACTION_CONNECT_STATUS_CHANGED = "com.xiaomi.smarthome.bluetooth.connect_status_changed";
     public static final String ACTION_CHARACTER_CHANGED = "com.xiaomi.smarthome.bluetooth.character_changed";
 
+
     /**
-     * ApiLevel 15
+     * ApiLevel:15
+     */
+    public static final int REQUEST_CODE_OPEN_BLUETOOTH = 0x10;
+
+    /**
+     * ApiLevel: 15
      */
     public static final String KEY_DEVICE_ADDRESS = "key_device_address";
     public static final String KEY_CONNECT_STATUS = "key_connect_status";
@@ -90,7 +124,7 @@ public abstract class XmBluetoothManager {
     public static final int STATUS_DISCONNECTED = 0x20;
 
     /**
-     * ApiLevel 15
+     * ApiLevel: 15
      */
     public static class Code {
         public static final int REQUEST_SUCCESS = 0;

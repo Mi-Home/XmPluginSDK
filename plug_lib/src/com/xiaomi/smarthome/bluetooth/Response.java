@@ -44,4 +44,11 @@ public class Response {
     public interface BleNotifyResponse extends BleResponse<Void> {
 
     }
+
+    /**
+     * ApiLevel: 15
+     */
+    public interface BleReadRssiResponse extends BleResponse<Integer> {
+
+    }
 }

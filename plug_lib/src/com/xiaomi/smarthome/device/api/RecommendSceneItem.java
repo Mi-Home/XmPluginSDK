@@ -21,13 +21,30 @@ public class RecommendSceneItem implements Parcelable {
      */
     public String mName;
     /**
-     * ApiLevel:8
+     * ApiLevel:16
      */
     public RemommendSceneCondition[] mRecommendConditionList;
     /**
      * ApiLevel:8
      */
     public RemommendSceneAction[] mRecommendActionList;
+    /**
+     * ApiLevel:16
+     */
+    public double mRecommLevel;
+    /**
+     * ApiLevel:16
+     */
+    public boolean mEnablePush;
+    /**
+     * ApiLevel:16
+     */
+    public boolean mShowInMainPage;
+
+    /**
+     * ApiLevel:16
+     */
+    public String mIcon;
 
     /**
      * ApiLevel:8

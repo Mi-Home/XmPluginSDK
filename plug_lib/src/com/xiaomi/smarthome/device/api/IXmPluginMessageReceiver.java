@@ -66,6 +66,11 @@ public interface IXmPluginMessageReceiver {
     public static final int MSG_BLUETOOTH_DISCONNECT = 9;
 
     /**
+     * ApiLevel:16 获取场景自定义条件中的extra字段
+     */
+    public static final int MSG_SCENE_GET_CONDITION_EXTRA = 10;
+
+    /**
      * ApiLevel:6
      */
     public static final int MSG_CUSTOM_START = 10000;

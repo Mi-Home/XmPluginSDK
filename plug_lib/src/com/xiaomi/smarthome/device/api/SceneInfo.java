@@ -23,6 +23,7 @@ public class SceneInfo implements Parcelable {
     public static final int LAUNCH_LEAVE_HOME = 3;
     public static final int LAUNCH_COME_HOME = 4;
     public static final int LAUNCH_MIKEY = 5;
+    public static final int LAUNCH_MIBAND = 6;
 
     @Override
     public int describeContents() {
@@ -74,7 +75,7 @@ public class SceneInfo implements Parcelable {
      */
     public boolean mEnable;
     /**
-     * ApiLevel:8
+     * ApiLevel:16
      */
     public List<SceneLaunch> mLaunchList;
     /**
@@ -102,6 +103,15 @@ public class SceneInfo implements Parcelable {
          * ApiLevel:8
          */
         public String mEventString;
+        /**
+         * ApiLevel:16
+         */
+        public String mDid;
+        /**
+         * ApiLevel:16
+         */
+        public String mExtra;
+
         public SceneLaunch() {
 
         }
@@ -159,9 +169,11 @@ public class SceneInfo implements Parcelable {
          * ApiLevel:8
          */
         public String mActionString;
+        /**
+         * ApiLevel:16
+         */
+        public String mDid;
 
-
-        public String mExtra;
         public SceneAction() {
 
         }
@@ -171,6 +183,7 @@ public class SceneInfo implements Parcelable {
             mDeviceModel = in.readString();
             mActionName = in.readString();
             mActionString = in.readString();
+            mDid = in.readString();
         }
 
         @Override
@@ -184,6 +197,7 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mDeviceModel);
             dest.writeString(mActionName);
             dest.writeString(mActionString);
+            dest.writeString(mDid);
         }
 
         public static final Parcelable.Creator<SceneAction> CREATOR = new Parcelable.Creator<SceneAction>() {

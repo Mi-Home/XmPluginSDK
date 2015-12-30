@@ -104,6 +104,10 @@ public class SceneInfo implements Parcelable {
          */
         public String mEventString;
         /**
+         * ApiLevel:8
+         */
+        public String mEventValue;
+        /**
          * ApiLevel:16
          */
         public String mDid;
@@ -120,6 +124,10 @@ public class SceneInfo implements Parcelable {
             mLaunchType = in.readInt();
             mLaunchName = in.readString();
             mDeviceModel = in.readString();
+            mEventString = in.readString();
+            mEventValue = in.readString();
+            mDid = in.readString();
+            mExtra = in.readString();
         }
 
         @Override
@@ -133,6 +141,9 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mLaunchName);
             dest.writeString(mDeviceModel);
             dest.writeString(mEventString);
+            dest.writeString(mEventValue);
+            dest.writeString(mDid);
+            dest.writeString(mExtra);
         }
 
         public static final Parcelable.Creator<SceneLaunch> CREATOR = new Parcelable.Creator<SceneLaunch>() {
@@ -172,7 +183,15 @@ public class SceneInfo implements Parcelable {
         /**
          * ApiLevel:16
          */
+        public String mActionValue;
+        /**
+         * ApiLevel:16
+         */
         public String mDid;
+        /**
+         * ApiLevel:16
+         */
+        public String mExtra;
 
         public SceneAction() {
 
@@ -183,7 +202,9 @@ public class SceneInfo implements Parcelable {
             mDeviceModel = in.readString();
             mActionName = in.readString();
             mActionString = in.readString();
+            mActionValue = in.readString();
             mDid = in.readString();
+            mExtra = in.readString();
         }
 
         @Override
@@ -197,7 +218,9 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mDeviceModel);
             dest.writeString(mActionName);
             dest.writeString(mActionString);
+            dest.writeString(mActionValue);
             dest.writeString(mDid);
+            dest.writeString(mExtra);
         }
 
         public static final Parcelable.Creator<SceneAction> CREATOR = new Parcelable.Creator<SceneAction>() {

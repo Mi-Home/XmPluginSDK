@@ -492,4 +492,8 @@ public interface IXmPluginHostActivity {
      * ApiLevel:15 设置黑色的状态栏，默认是黑色的
      */
     public abstract void enableBlackTranslucentStatus();
+    /**
+     * ApiLevel:1 开始加载场景
+     */
+    public abstract void startLoadScene(AsyncCallback callback);
 }

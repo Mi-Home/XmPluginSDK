@@ -106,7 +106,7 @@ public class SceneInfo implements Parcelable {
         /**
          * ApiLevel:8
          */
-        public String mEventValue;
+        public Object mEventValue;
         /**
          * ApiLevel:16
          */
@@ -125,7 +125,7 @@ public class SceneInfo implements Parcelable {
             mLaunchName = in.readString();
             mDeviceModel = in.readString();
             mEventString = in.readString();
-            mEventValue = in.readString();
+            mEventValue = in.readValue(ClassLoader.getSystemClassLoader());
             mDid = in.readString();
             mExtra = in.readString();
         }
@@ -141,7 +141,7 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mLaunchName);
             dest.writeString(mDeviceModel);
             dest.writeString(mEventString);
-            dest.writeString(mEventValue);
+            dest.writeValue(mEventValue);
             dest.writeString(mDid);
             dest.writeString(mExtra);
         }

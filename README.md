@@ -171,17 +171,11 @@ eclipse中调试插件，具体参考
 - [开发环境配置](开发环境配置.md)
 - [插件开发](插件开发.md)
 - [开发接口描述](开发接口描述.md)
+- [蓝牙规范](智能家庭蓝牙规范.md)
 
 
 
 
 
-小米智能家庭蓝牙插件规范
-========================================
-
-根据设备是否符合小米蓝牙标准协议，智能家庭有两种不同的调用方式
-
-1. [符合小米蓝牙标准协议](https://github.com/dingjikerbo/blog/blob/master/%E5%B0%8F%E7%B1%B3%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E8%A7%84%E8%8C%831.md)
-2. [不符合小米蓝牙标准协议](https://github.com/dingjikerbo/blog/blob/master/%E5%B0%8F%E7%B1%B3%E6%99%BA%E8%83%BD%E5%AE%B6%E5%BA%AD%E8%A7%84%E8%8C%832.md)
 
 <!-- create time: 2015-04-17 10:53:01  -->

@@ -1,9 +1,7 @@
 package com.xiaomi.smarthome.bluetooth;
 
 import android.os.Bundle;
-
-import java.io.Serializable;
-import java.util.UUID;
+import com.xiaomi.smarthome.bluetooth.XmBluetoothManager.XmBundle;
 
 /**
  * Created by liwentian on 2015/11/10.
@@ -21,6 +19,13 @@ public class Response {
      * ApiLevel: 15
      */
     public interface BleConnectResponse extends BleResponse<Bundle> {
+
+    }
+
+    /**
+     * ApiLevel: 16
+     */
+    public interface BleConnectResponse2 extends BleResponse<XmBundle> {
 
     }
 

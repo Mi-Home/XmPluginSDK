@@ -75,6 +75,11 @@ public class SceneInfo implements Parcelable {
      */
     public boolean mEnable;
     /**
+     * ApiLevel:8
+     */
+    @Deprecated
+    public SceneLaunch mLaunch;
+    /**
      * ApiLevel:16
      */
     public List<SceneLaunch> mLaunchList;

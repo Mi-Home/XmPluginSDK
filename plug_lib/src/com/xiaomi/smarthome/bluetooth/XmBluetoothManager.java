@@ -4,12 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 
 import java.util.UUID;
-import com.xiaomi.smarthome.bluetooth.Response;
 import com.xiaomi.smarthome.bluetooth.Response.BleReadRssiResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleNotifyResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleReadResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleWriteResponse;
 import com.xiaomi.smarthome.bluetooth.Response.BleConnectResponse;
+import com.xiaomi.smarthome.bluetooth.Response.BleConnectResponse2;
 
 /**
  * Created by liwentian on 2015/10/29.
@@ -33,6 +33,13 @@ public abstract class XmBluetoothManager {
      * 设备连接
      */
     public abstract void connect(String mac, final BleConnectResponse response);
+
+
+    /**
+     * ApiLevel: 16
+     * 设备连接
+     */
+    public abstract void connect(String mac, final BleConnectResponse2 response);
 
     /**
      * ApiLevel 15
@@ -134,6 +141,15 @@ public abstract class XmBluetoothManager {
         public static final int BLE_NOT_SUPPORTED = -4;
         public static final int BLUETOOTH_DISABLED = -5;
         public static final int CONNECTION_NOT_READY = -6;
+        public static final int REQUEST_TIMEDOUT = -7;
         public static final int TOKEN_NOT_MATCHED = -10;
+    }
+
+    /**
+     * ApiLevel: 16
+     */
+    public static class XmBundle {
+        public Bundle bundle;
+        public Object obj;
     }
 }

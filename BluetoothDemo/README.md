@@ -1,4 +1,4 @@
-# BluetoothCommon
+# 蓝牙接口说明
 
 首先要在Application的onCreate中初始化BluetoothManager.
 

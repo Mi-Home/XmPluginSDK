@@ -11,8 +11,10 @@ import com.xiaomi.smarthome.bluetooth.filter.BleAdvertisement;
 import com.xiaomi.smarthome.bluetooth.search.BluetoothSearchHelper;
 import com.xiaomi.smarthome.bluetooth.search.BluetoothSearchRequest;
 import com.xiaomi.smarthome.bluetooth.search.BluetoothSearchResponse;
+import com.xiaomi.smarthome.bluetooth.security.BleSecurityLogin;
 import com.xiaomi.smarthome.bluetooth.security.BleSecurityRegister;
 import com.xiaomi.smarthome.bluetooth.utils.BluetoothLog;
+import com.xiaomi.smarthome.bluetooth.utils.ByteUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnCancel;
 
     private BluetoothSearchRequest mRequest;
+
+    private byte[] mToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,14 @@ public class MainActivity extends AppCompatActivity {
         mBtnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scan();
+//                scan();
+                if (ByteUtils.isEmpty(mToken)) {
+                    register();
+                } else {
+                    login();
+                }
             }
+
         });
 
         mBtnCancel = (Button) findViewById(R.id.cancel);
@@ -42,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
                 if (mRequest != null) {
                     BluetoothSearchHelper.getInstance().cancelSearch(mRequest);
                 }
+            }
+        });
+
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mToken = null;
             }
         });
     }
@@ -87,9 +105,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(int i, byte[] bytes) {
                 if (i == BluetoothManager.Code.REQUEST_SUCCESS) {
-                    BluetoothLog.i("REQUEST_SUCCESS");
+                    BluetoothLog.i("register success");
+                    BluetoothLog.e("token is " + ByteUtils.byteToString(bytes));
+                    mToken = bytes;
                 } else {
-                    BluetoothLog.i("REQUEST_FAILED");
+                    BluetoothLog.i("register failed");
+                }
+            }
+        });
+    }
+
+    private void login() {
+        BleSecurityLogin login = new BleSecurityLogin("08:7C:BE:0D:CD:1B", mToken);
+        login.login(new BleSecurityLogin.BleLoginResponse() {
+            @Override
+            public void onResponse(int i, Void aVoid) {
+                if (i == BluetoothManager.Code.REQUEST_SUCCESS) {
+                    BluetoothLog.i("login success");
+                } else {
+                    BluetoothLog.i("login failed");
                 }
             }
         });

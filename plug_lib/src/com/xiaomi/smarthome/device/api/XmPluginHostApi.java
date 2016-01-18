@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
@@ -19,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +46,7 @@ public abstract class XmPluginHostApi {
 
     /**
      * ApiLevel: 17 主app渠道
-     * 
+     *
      * @return
      */
     public abstract String getChannel();
@@ -64,41 +67,41 @@ public abstract class XmPluginHostApi {
      * ApiLevel:1
      *
      * @param xmPluginPackage 插件包
-     * @param intent 传入的参数
-     * @param did 设备did
-     * @param activityClass 启动的activity
+     * @param intent          传入的参数
+     * @param did             设备did
+     * @param activityClass   启动的activity
      */
     public abstract void startActivity(Context context, XmPluginPackage xmPluginPackage,
-            Intent intent,
-            String did, Class activityClass);
+                                       Intent intent,
+                                       String did, Class activityClass);
 
     /**
      * ApiLevel:1 调用智能家居后台http服务
      *
-     * @param model 插件model
+     * @param model       插件model
      * @param relativeUrl 服务接口url
      * @param params
      * @param callback
      * @param parser
      */
     public abstract <T> void callSmartHomeApi(String model, String relativeUrl, JSONObject params,
-            final Callback<T> callback, final Parser<T> parser);
+                                              final Callback<T> callback, final Parser<T> parser);
 
     // method POST or GET
 
     /**
      * ApiLevel:1 调用普通http请求
      *
-     * @param model 插件model
-     * @param url 请求url
-     * @param method METHOD_POST或METHOD_GET
+     * @param model    插件model
+     * @param url      请求url
+     * @param method   METHOD_POST或METHOD_GET
      * @param params
      * @param callback
      * @param parser
      */
     @Deprecated
     public abstract <T> void callHttpApi(String model, String url, String method,
-            List<NameValuePair> params, final Callback<T> callback, final Parser<T> parser);
+                                         List<NameValuePair> params, final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel: 13 调用普通http请求
@@ -112,29 +115,29 @@ public abstract class XmPluginHostApi {
      * @param <T>
      */
     public abstract <T> void callHttpApiV13(String model, String url, String method,
-            List<KeyValuePair> params, final Callback<T> callback, final Parser<T> parser);
+                                            List<KeyValuePair> params, final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel:1 设备方法调用
      *
-     * @param method 方法名
-     * @param params 参数，可以是一个集合Collection子类
+     * @param method   方法名
+     * @param params   参数，可以是一个集合Collection子类
      * @param callback 回调结果
      * @param parser
      */
     public abstract <T> void callMethod(String did, String method, Object[] params,
-            final Callback<T> callback, final Parser<T> parser);
+                                        final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel:1 设备方法调用
      *
-     * @param method 方法名
+     * @param method   方法名
      * @param params
      * @param callback 回调结果
      * @param parser
      */
     public abstract <T> void callMethod(String did, String method, JSONArray params,
-            final Callback<T> callback, final Parser<T> parser);
+                                        final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel:1 获取设备列表
@@ -166,7 +169,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void getSubDevice(String model, String[] didList,
-            final Callback<List<DeviceStat>> callback) {
+                             final Callback<List<DeviceStat>> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             if (didList != null) {
@@ -248,11 +251,11 @@ public abstract class XmPluginHostApi {
      * @param did
      * @param pid
      * @param entryList 属性列表 属性必须加 prop.
-     * @param expire 分钟 必须<=3
+     * @param expire    分钟 必须<=3
      * @param callback
      */
     public abstract void subscribeDevice(String did, int pid, List<String> entryList, int expire,
-            Callback<Void> callback);
+                                         Callback<Void> callback);
 
     /**
      * ApiLevel: 13 取消订阅
@@ -263,7 +266,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public abstract void unsubscribeDevice(String did, int pid, List<String> entryList,
-            Callback<Void> callback);
+                                           Callback<Void> callback);
 
     // ApiLevel:1
     // 统计相关接口,参考miui开放平台统计，
@@ -274,18 +277,18 @@ public abstract class XmPluginHostApi {
     public abstract void recordCountEvent(String category, String key);
 
     public abstract void recordCountEvent(String category, String key,
-            Map<String, String> params);
+                                          Map<String, String> params);
 
     public abstract void recordCalculateEvent(String category, String key, long value);
 
     public abstract void recordCalculateEvent(String category, String key, long value,
-            Map<String, String> params);
+                                              Map<String, String> params);
 
     public abstract void recordStringPropertyEvent(String category, String key,
-            String value);
+                                                   String value);
 
     public abstract void recordNumericPropertyEvent(String category, String key,
-            long value);
+                                                    long value);
 
     // ///////////////
 
@@ -308,7 +311,7 @@ public abstract class XmPluginHostApi {
      * @param extra
      */
     public abstract void addRecord(XmPluginPackage loadedInfo, String key, Object value,
-            JSONObject extra);
+                                   JSONObject extra);
 
     // ///////////////
     // scence
@@ -317,14 +320,14 @@ public abstract class XmPluginHostApi {
      * ApiLevel:2 获取场景
      *
      * @param model
-     * @param st_id 场景模板id
+     * @param st_id    场景模板id
      * @param did
      * @param name
      * @param callback
      */
     @Deprecated
     public void loadScene(String model, int st_id, String did, String name,
-            final Callback<JSONObject> callback) {
+                          final Callback<JSONObject> callback) {
 
         JSONObject dataObj = new JSONObject();
         try {
@@ -352,8 +355,8 @@ public abstract class XmPluginHostApi {
      * ApiLevel:2 编辑场景接口
      *
      * @param model
-     * @param st_id 场景模板id
-     * @param us_id 场景id
+     * @param st_id    场景模板id
+     * @param us_id    场景id
      * @param did
      * @param name
      * @param setting
@@ -362,8 +365,8 @@ public abstract class XmPluginHostApi {
      */
     @Deprecated
     public void editScene(String model, int st_id, int us_id, String did, String name,
-            JSONObject setting,
-            JSONArray authed, final Callback<JSONObject> callback) {
+                          JSONObject setting,
+                          JSONArray authed, final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("us_id", us_id);
@@ -399,8 +402,8 @@ public abstract class XmPluginHostApi {
      */
     @Deprecated
     public void editTimerScene(String model, String did, int us_id, String name,
-            JSONObject setting,
-            JSONArray authed, final Callback<JSONObject> callback) {
+                               JSONObject setting,
+                               JSONArray authed, final Callback<JSONObject> callback) {
 
         JSONObject dataObj = new JSONObject();
         try {
@@ -435,7 +438,7 @@ public abstract class XmPluginHostApi {
      */
     @Deprecated
     public void loadTimerScene(String model, String did, String name,
-            final Callback<JSONObject> callback) {
+                               final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("identify", did);
@@ -466,7 +469,7 @@ public abstract class XmPluginHostApi {
      */
     @Deprecated
     public void getTimerScene(String model, String did, int us_id,
-            final Callback<JSONObject> callback) {
+                              final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("identify", did);
@@ -495,7 +498,7 @@ public abstract class XmPluginHostApi {
      */
     @Deprecated
     public void delScene(String model, String did, int us_id,
-            final Callback<JSONObject> callback) {
+                         final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("identify", did);
@@ -527,8 +530,8 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void setScene(String model, String did, String name, int st_id,
-            JSONObject setting, JSONArray authed,
-            final Callback<Void> callback) {
+                         JSONObject setting, JSONArray authed,
+                         final Callback<Void> callback) {
 
         JSONObject dataObj = new JSONObject();
         try {
@@ -556,7 +559,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void getScene(String model, String did,
-            final Callback<JSONObject> callback) {
+                         final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("identify", did);
@@ -583,7 +586,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void startScene(String model, String did, String key,
-            final Callback<JSONObject> callback) {
+                           final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("identify", did);
@@ -620,9 +623,9 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void reportGPSInfo(String model, String did, double lng, double lat,
-            String adminArea, String countryCode, String locality,
-            String thoroughfare, String subLocality,
-            Callback<Void> callback) {
+                              String adminArea, String countryCode, String locality,
+                              String thoroughfare, String subLocality,
+                              Callback<Void> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("did", did);
@@ -650,7 +653,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void getWeatherInfo(String model, String did,
-            Callback<WeatherInfo> callback) {
+                               Callback<WeatherInfo> callback) {
 
         JSONObject dataObj = new JSONObject();
         try {
@@ -687,12 +690,12 @@ public abstract class XmPluginHostApi {
      * ApiLevel:2 设备方法调用，完全透明调用，需要自己设置参数
      *
      * @param did
-     * @param params 参数，JsonObject字符串
+     * @param params   参数，JsonObject字符串
      * @param callback 回调结果
      * @param parser
      */
     public abstract <T> void callMethod(String did, String params, final Callback<T> callback,
-            final Parser<T> parser);
+                                        final Parser<T> parser);
 
     /**
      * ApiLevel:2 访问路由器服务远程接口
@@ -706,8 +709,8 @@ public abstract class XmPluginHostApi {
      */
     @Deprecated
     public abstract <T> void callRouterRemoteApi(String routerId, String url, String method,
-            boolean fullPath, List<NameValuePair> params, final Callback<T> callback,
-            final Parser<T> parser);
+                                                 boolean fullPath, List<NameValuePair> params, final Callback<T> callback,
+                                                 final Parser<T> parser);
 
     /**
      * ApiLevel: 13 访问路由器服务远程接口
@@ -722,8 +725,8 @@ public abstract class XmPluginHostApi {
      * @param <T>
      */
     public abstract <T> void callRouterRemoteApiV13(String routerId, String url, String method,
-            boolean fullPath, List<KeyValuePair> params, final Callback<T> callback,
-            final Parser<T> parser);
+                                                    boolean fullPath, List<KeyValuePair> params, final Callback<T> callback,
+                                                    final Parser<T> parser);
 
     /**
      * ApiLevel:2 获取当前登录的账号id
@@ -735,16 +738,16 @@ public abstract class XmPluginHostApi {
     /**
      * ApiLevel:2 调用本地局域网普通http请求 延时更低，超时时间为2s
      *
-     * @param model 插件model
-     * @param url 请求url
-     * @param method METHOD_POST或METHOD_GET
+     * @param model    插件model
+     * @param url      请求url
+     * @param method   METHOD_POST或METHOD_GET
      * @param params
      * @param callback
      * @param parser
      */
     @Deprecated
     public abstract <T> void callLocalHttpApi(String model, String url, String method,
-            List<NameValuePair> params, final Callback<T> callback, final Parser<T> parser);
+                                              List<NameValuePair> params, final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel: 13 调用本地局域网普通http请求 延时更低，超时时间为2s
@@ -758,7 +761,7 @@ public abstract class XmPluginHostApi {
      * @param <T>
      */
     public abstract <T> void callLocalHttpApiV13(String model, String url, String method,
-            List<KeyValuePair> params, final Callback<T> callback, final Parser<T> parser);
+                                                 List<KeyValuePair> params, final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel:2 修改设备名字
@@ -768,7 +771,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public abstract void modDeviceName(String did, String newName,
-            final Callback<Void> callback);
+                                       final Callback<Void> callback);
 
     /**
      * ApiLevel:2 解绑设备
@@ -777,7 +780,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public abstract void unBindDevice(final String did, int pid,
-            final Callback<Void> callback);
+                                      final Callback<Void> callback);
 
     /**
      * ApiLevel:3 获取最新位置
@@ -813,7 +816,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void getUpdateInfo(String model, String did, int pid,
-            final Callback<DeviceUpdateInfo> callback) {
+                              final Callback<DeviceUpdateInfo> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("did", did);
@@ -847,7 +850,7 @@ public abstract class XmPluginHostApi {
     /**
      * ApiLevel:3 加载native so
      *
-     * @param libName so库名字
+     * @param libName     so库名字
      * @param classLoader 插件的classloader
      */
     @Deprecated
@@ -857,7 +860,7 @@ public abstract class XmPluginHostApi {
      * ApiLevel:6 加载native so
      *
      * @param loadedInfo 插件上下文
-     * @param libName so库名字
+     * @param libName    so库名字
      */
     public abstract void loadLibrary(XmPluginPackage loadedInfo, String libName);
 
@@ -865,7 +868,7 @@ public abstract class XmPluginHostApi {
      * ApiLevel:3 获取app属性
      *
      * @param model
-     * @param name 属性名
+     * @param name  属性名
      * @return 属性值
      */
     public abstract String getProperty(String model, String name);
@@ -904,7 +907,7 @@ public abstract class XmPluginHostApi {
      * @param activityClass
      */
     public abstract void startService(Intent service, XmPluginPackage xmPluginPackage,
-            Class activityClass);
+                                      Class activityClass);
 
     /**
      * ApiLevel:6
@@ -915,7 +918,7 @@ public abstract class XmPluginHostApi {
      * @return
      */
     public abstract boolean stopService(Intent service, XmPluginPackage xmPluginPackage,
-            Class activityClass);
+                                        Class activityClass);
 
     /**
      * ApiLevel:6
@@ -928,8 +931,8 @@ public abstract class XmPluginHostApi {
      * @return
      */
     public abstract boolean bindService(Intent service, XmPluginPackage xmPluginPackage,
-            Class activityClass, ServiceConnection conn,
-            int flags);
+                                        Class activityClass, ServiceConnection conn,
+                                        int flags);
 
     /**
      * ApiLevel:6 把某个设备添加桌面快捷方式
@@ -950,10 +953,10 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public abstract void setSubDeviceShownMode(XmPluginPackage xmPluginPackage,
-            boolean shownInDeviceList,
-            String did,
-            Context context,
-            final Callback<Void> callback);
+                                               boolean shownInDeviceList,
+                                               String did,
+                                               Context context,
+                                               final Callback<Void> callback);
 
     /**
      * ApiLevel:7 检测当前连接路由器是否是小米路由器
@@ -962,7 +965,7 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public abstract void checkLocalRouterInfo(String routerId,
-            Callback<Void> callback);
+                                              Callback<Void> callback);
 
     /**
      * ApiLevel:7 返回当前连接路由器是否是小米路由器
@@ -986,19 +989,19 @@ public abstract class XmPluginHostApi {
      * @param uri
      */
     public abstract void gotoPage(Context context, XmPluginPackage xmPluginPackage, Uri uri,
-            Callback<Void> callback);
+                                  Callback<Void> callback);
 
     /**
      * ApiLevel:8 获取场景
      *
      * @param model
-     * @param st_id 场景模板id
+     * @param st_id    场景模板id
      * @param did
      * @param identify
      * @param callback
      */
     public void loadScene(String model, int st_id, String did, String identify, String name,
-            final Callback<JSONObject> callback) {
+                          final Callback<JSONObject> callback) {
 
         JSONObject dataObj = new JSONObject();
         try {
@@ -1027,8 +1030,8 @@ public abstract class XmPluginHostApi {
      * ApiLevel:8 编辑场景接口
      *
      * @param model
-     * @param st_id 场景模板id
-     * @param us_id 场景id
+     * @param st_id    场景模板id
+     * @param us_id    场景id
      * @param did
      * @param name
      * @param setting
@@ -1036,9 +1039,9 @@ public abstract class XmPluginHostApi {
      * @param callback
      */
     public void editScene(String model, int st_id, int us_id, String did, String identify,
-            String name,
-            JSONObject setting,
-            JSONArray authed, final Callback<JSONObject> callback) {
+                          String name,
+                          JSONObject setting,
+                          JSONArray authed, final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("us_id", us_id);
@@ -1068,7 +1071,7 @@ public abstract class XmPluginHostApi {
      */
 
     public void delScene(String model, int us_id,
-            final Callback<JSONObject> callback) {
+                         final Callback<JSONObject> callback) {
         JSONObject dataObj = new JSONObject();
         try {
             dataObj.put("us_id", us_id);
@@ -1090,14 +1093,14 @@ public abstract class XmPluginHostApi {
     /**
      * ApiLevel:8 调用智能家居后台http服务
      *
-     * @param model 插件model
+     * @param model       插件model
      * @param relativeUrl 服务接口url
      * @param params
      * @param callback
      * @param parser
      */
     public abstract <T> void callSmartHomeApi(String model, String relativeUrl, String params,
-            final Callback<T> callback, final Parser<T> parser);
+                                              final Callback<T> callback, final Parser<T> parser);
 
     /**
      * ApiLevel:8 向某个设备的插件发送消息
@@ -1109,12 +1112,12 @@ public abstract class XmPluginHostApi {
      * @param msgCallback
      */
     public abstract void sendMessage(String did, int msgType, Intent msgArg,
-            DeviceStat deviceStat, MessageCallback msgCallback);
+                                     DeviceStat deviceStat, MessageCallback msgCallback);
 
     /**
      * ApiLevel:10 通知蓝牙设备已绑定
      *
-     * @param mac 绑定的设备mac
+     * @param mac   绑定的设备mac
      * @param token 设备token
      */
     public abstract void notifyBluetoothBinded(String mac, String token);
@@ -1129,11 +1132,11 @@ public abstract class XmPluginHostApi {
     /**
      * ApiLevel:10 开始一个下载
      *
-     * @param uri download uri
-     * @param udn can be @null
+     * @param uri     download uri
+     * @param udn     can be @null
      * @param dirType the directory type to pass to {@link Context#getExternalFilesDir(String)}
      * @param subPath the path within the external directory. If subPath is a directory(ending with
-     *            "/"), destination filename will be generated.
+     *                "/"), destination filename will be generated.
      * @return download id
      */
     @Deprecated
@@ -1175,26 +1178,97 @@ public abstract class XmPluginHostApi {
      * ApiLevel:10 query download
      *
      * @param onlyVisibleDownloads hide downloads exclude
-     * @param filterIds the IDs of the downloads
+     * @param filterIds            the IDs of the downloads
      */
     @Deprecated
     public abstract Cursor queryDownload(boolean onlyVisibleDownloads, long... filterIds);
 
+    
     /**
      * ApiLevel:14 更新设备的子设备
      */
-    public abstract void updateSubDevice(XmPluginPackage xmPluginPackage, String[] didList,
-            Callback<List<DeviceStat>> callback);
+    public abstract void updateSubDevice(XmPluginPackage xmPluginPackage,String[] didList,Callback<List<DeviceStat>> callback);
 
     /**
      * ApiLevel:15 异步调用第三方云接口
      */
-    public abstract void callRemoteAsync(final String[] dids, final int appId, Object object,
-            Callback<JSONObject> callback);
+    public abstract void callRemoteAsync(final String[] dids, final int appId, Object object, Callback<JSONObject> callback);
+
 
     /**
      * ApiLevel:16 获取蓝牙设备固件升级信息
      */
-    public abstract void getBluetoothFirmwareUpdateInfo(String model,
-            final Callback<BtFirmwareUpdateInfo> callback);
+    public abstract void getBluetoothFirmwareUpdateInfo(String model, final Callback<BtFirmwareUpdateInfo> callback);
+    
+    /**
+     * ApiLevel:17 同步设备gps信息
+     */
+    public void reportGPSInfo(final String did, final Callback<Void> callback) {
+        if (TextUtils.isEmpty(did)) {
+            if (callback != null) {
+                callback.onFailure(-1, "");
+            }
+            return;
+        }
+        final DeviceStat deviceStat = getDeviceByDid(did);
+        if (deviceStat == null) {
+            if (callback != null) {
+                callback.onFailure(-1, "");
+            }
+            return;
+        }
+        requestLocation(new Callback<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location == null) {
+                    if (callback != null) {
+                        callback.onFailure(-1, "");
+                    }
+                    return;
+                }
+                Address lastAddress = null;
+                Geocoder geoCoder = new Geocoder(context());
+                try {
+                    List<Address> addressList = geoCoder.getFromLocation(
+                            location.getLatitude(),
+                            location.getLongitude(), 1);
+                    if (addressList != null && addressList.size() > 0) {
+                        lastAddress = addressList.get(0);
+                    }
+                } catch (IOException e) {
+                }
+                if (lastAddress == null) {
+                    if (callback != null) {
+                        callback.onFailure(-1, "");
+                    }
+                    return;
+                }
+
+                String adminArea = "";
+                String countryCode = "";
+                String locality = "";
+                String thoroughfare = "";
+                String subLocality = "";
+
+                adminArea = lastAddress.getAdminArea();
+                countryCode = lastAddress.getCountryCode();
+                locality = lastAddress.getLocality();
+                thoroughfare = lastAddress.getThoroughfare();
+                subLocality = lastAddress.getSubLocality();
+
+                reportGPSInfo(deviceStat.model, did,
+                        location.getLongitude(), location.getLatitude(),
+                        adminArea, countryCode, locality, thoroughfare,
+                        subLocality, callback);
+            }
+
+            @Override
+            public void onFailure(int error, String errorInfo) {
+                if (callback != null) {
+                    callback.onFailure(error, errorInfo);
+                }
+            }
+        });
+    }
+    
 }

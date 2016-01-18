@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.xiaomi.smarthome.bluetooth.BluetoothManager;
 import com.xiaomi.smarthome.bluetooth.XmBluetoothDevice;
+import com.xiaomi.smarthome.bluetooth.filter.BleAdvertisement;
 import com.xiaomi.smarthome.bluetooth.search.BluetoothSearchHelper;
 import com.xiaomi.smarthome.bluetooth.search.BluetoothSearchRequest;
 import com.xiaomi.smarthome.bluetooth.search.BluetoothSearchResponse;
@@ -56,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDeviceFounded(XmBluetoothDevice device) {
                 BluetoothLog.i("onDeviceFounded" + device);
+
+                BleAdvertisement adv = new BleAdvertisement(device);
+
+                int productId = adv.getProductId();
+
+                if (productId > 0) {
+                    BluetoothLog.e(String.format("product id for %s is 0x%x", device.device.getAddress(), productId));
+                }
             }
 
             @Override

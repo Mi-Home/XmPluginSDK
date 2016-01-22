@@ -36,7 +36,7 @@ public abstract class XmBluetoothManager {
 
 
     /**
-     * ApiLevel: 17
+     * ApiLevel: 16
      * 设备连接
      */
     public abstract void connect(String mac, final BleConnectResponse2 response);
@@ -146,17 +146,10 @@ public abstract class XmBluetoothManager {
     }
 
     /**
-     * ApiLevel: 17
+     * ApiLevel: 16
      */
     public static class XmBundle {
         public Bundle bundle;
         public Object obj;
     }
-
-    /**
-     * ApiLevel: 17
-     * @param mac
-     * @param name
-     */
-    public abstract void deviceRename(String mac, String name);
 }

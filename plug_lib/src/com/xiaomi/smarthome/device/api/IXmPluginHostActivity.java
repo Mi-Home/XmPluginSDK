@@ -322,6 +322,19 @@ public interface IXmPluginHostActivity {
                                        String shareContent,
                                        String shareImagesZipUrl
     );
+
+    /**
+     * ApiLevel: 17 打开分享页面，分享多张图片,添加缩略图
+     *
+     * @param shareTitle        分享title
+     * @param shareContent      分享文字内容
+     * @param shareImagesZipUrl 分享链接图片zip包，可以是本地文件zip包文件路径，本地单张图片路径，网络zip包url
+     * @param thumb      缩略图，不超过32k大小
+     */
+    public void openShareMediaActivity(String shareTitle,
+                                       String shareContent,
+                                       String shareImagesZipUrl,Bitmap thumb
+    );
     
     /**
      * ApiLevel: 15 打开分享dialog，分享本地图片

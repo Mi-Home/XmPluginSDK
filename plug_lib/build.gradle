@@ -1,17 +1,19 @@
 apply plugin: 'android-library'
 
-configurations{
+configurations {
     providedlibs
 }
 
 dependencies {
     provided files('lib_ex/android-support-v13.jar')
-//    compile files('lib_ex/android-support-v4.jar')
+    //    compile files('lib_ex/android-support-v4.jar')
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "23.0.1"
+
+    useLibrary 'org.apache.http.legacy'
 
     libraryVariants.all {
         variant -> variant.javaCompile.classpath += configurations.providedlibs

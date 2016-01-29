@@ -186,3 +186,33 @@ private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 };
 ```
 
+七、蓝牙安全连接
+--
+安全连接包括安全注册和安全登录。当本地没有token时采用安全注册生成token并写入设备，当本地有token时采用安全登录。
+
+```Java
+BleSecurityRegister register = new BleSecurityRegister(mac, productId);
+register.register(new BleSecurityRegister.BleRegisterResponse() {
+    @Override
+    public void onResponse(int i, byte[] bytes) {
+        if (i == BluetoothManager.Code.REQUEST_SUCCESS) {
+            mToken = bytes;
+        } else {
+            BluetoothLog.i("register failed");
+        }
+    }
+});
+
+BleSecurityLogin login = new BleSecurityLogin("08:7C:BE:0D:CD:1B", mToken);
+login.login(new BleSecurityLogin.BleLoginResponse() {
+    @Override
+    public void onResponse(int i, Void aVoid) {
+        if (i == BluetoothManager.Code.REQUEST_SUCCESS) {
+            BluetoothLog.i("login success");
+        } else {
+            BluetoothLog.i("login failed");
+        }
+    }
+});
+```
+

@@ -56,6 +56,8 @@ BluetoothSearchHelper.getInstance().startSearch(request, new BluetoothSearchResp
 BluetoothSearchHelper.getInstance().cancelSearch(request);
 ```
 
+需要注意的是cancel后的request是不能复用的，需要重新new一个request。
+
 二、连接
 ----
 

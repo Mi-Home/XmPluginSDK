@@ -1,5 +1,6 @@
 # 小米智能家庭Android app免安装插件开发手册
 
+# 请使用[新版SDK](https://github.com/MiEcosystem/NewXmPluginSDK)
 
 **最新修改**
 

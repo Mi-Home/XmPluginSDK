@@ -151,7 +151,7 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mExtra);
         }
 
-        public static final Parcelable.Creator<SceneLaunch> CREATOR = new Parcelable.Creator<SceneLaunch>() {
+        public static final Creator<SceneLaunch> CREATOR = new Creator<SceneLaunch>() {
 
             @Override
             public SceneLaunch createFromParcel(Parcel source) {
@@ -197,6 +197,10 @@ public class SceneInfo implements Parcelable {
          * ApiLevel:16
          */
         public String mExtra;
+        /**
+         * ApiLevel:18
+         */
+        public int mDelayTime;
 
         public SceneAction() {
 
@@ -228,7 +232,7 @@ public class SceneInfo implements Parcelable {
             dest.writeString(mExtra);
         }
 
-        public static final Parcelable.Creator<SceneAction> CREATOR = new Parcelable.Creator<SceneAction>() {
+        public static final Creator<SceneAction> CREATOR = new Creator<SceneAction>() {
 
             @Override
             public SceneAction createFromParcel(Parcel source) {
@@ -242,7 +246,7 @@ public class SceneInfo implements Parcelable {
         };
     }
 
-    public static final Parcelable.Creator<SceneInfo> CREATOR = new Parcelable.Creator<SceneInfo>() {
+    public static final Creator<SceneInfo> CREATOR = new Creator<SceneInfo>() {
 
         @Override
         public SceneInfo createFromParcel(Parcel source) {

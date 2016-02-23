@@ -1,4 +1,4 @@
-# 蓝牙接口说明
+# 蓝牙接口说明（独立APP）
 
 首先要在Application的onCreate中初始化BluetoothManager.
 
